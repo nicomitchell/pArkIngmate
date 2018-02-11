@@ -3,7 +3,7 @@ package gridbuilder
 import (
 	"github.com/pArkIngmate/src/boundingbox"
 	"github.com/pArkIngmate/src/boundingbox/boundingboxtypes"
-	"github.com/pArkIngmate/src/gridbuilder/gridbuildertypes"
+	"github.com/pArkIngmate/src/grid/gridbuilder/gridbuildertypes"
 )
 
 //GridBuilder creates the grid to estimate lines of parking rows
@@ -38,7 +38,7 @@ func (g *GridBuilder) GetLines() []*gridbuildertypes.Line {
 }
 
 func findIntersection(l *gridbuildertypes.Line, b *boundingbox.BoundingBox) bool {
-	for x := b.Left; x < b.Right; x++ {
+	for x := b.Left; x < b.Right && x < l.End.X; x++ {
 		step := x - l.Start.X
 		val := l.Slope*float64(step) + float64(l.Start.Y)
 		if val > float64(b.Bottom) && val < float64(b.Top) {

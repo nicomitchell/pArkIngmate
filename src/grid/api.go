@@ -1,6 +1,7 @@
 package grid
 
 import (
+	"github.com/pArkIngmate/src/boundingbox/boundingboxtypes"
 	"github.com/pArkIngmate/src/boundingbox"
 	"github.com/pArkIngmate/src/grid/gridbuilder"
 	"github.com/pArkIngmate/src/grid/gridbuilder/gridbuildertypes"
@@ -14,4 +15,8 @@ func BuildGrid(boxes []*boundingbox.BoundingBox) (*gridbuilder.GridBuilder, []*g
 		line.Intersects := gb.DetermineIntersects(line)
 		line.Confidence := gb.GetConfidence(line)
 	}
+}
+
+func GetGapPoints() []*boundingboxtypes.Coordinate {
+	
 }
