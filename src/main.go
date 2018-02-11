@@ -23,6 +23,7 @@ func main() {
 		panic(fmt.Sprintf("File open error: %s", err.Error()))
 	}
 	defer f.Close()
+
 	lines := getLines(f)
 	boxes, errs := coordparser.GetBoxes(lines)
 	for _, err := range errs {
@@ -33,25 +34,26 @@ func main() {
 	for _, val := range centers {
 		fmt.Printf("%d, %d\n", val.X, val.Y)
 	}
+
 	imgFile, err := os.Open("/home/nicolasmitchell/go/src/github.com/darknet/predictions.png")
 	if err != nil {
 		panic(fmt.Sprintf("File open error: %s", err.Error()))
 	}
 	defer imgFile.Close()
+
 	img, err := png.Decode(imgFile)
 	if err != nil {
 		panic(fmt.Sprintf("PNG decoding error: %s", err.Error()))
 	}
+
 	outFile, err := os.Create("/home/nicolasmitchell/go/src/github.com/pArkIngmate/image_out.jpg")
 	if err != nil {
 		panic(fmt.Sprintf("File open error: %s", err))
 	}
 	defer outFile.Close()
 
-	//pts := getCrossPixels(centers)
 	imgEditor := imageeditor.New(img)
 	iWriter := imgwriter.New(centers, nil, imgEditor, outFile)
-	//iWriter.SetAllPoints()
 	iWriter.SetAllPointsCircles(10)
 	err = iWriter.Save()
 	if err != nil {
