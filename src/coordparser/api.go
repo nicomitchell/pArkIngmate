@@ -8,8 +8,8 @@ import (
 )
 
 //GetBoxes returns the BoundingBoxes parsed from the file
-func GetBoxes(lines []string) ([]boundingbox.BoundingBox, []error) {
-	boxes := []boundingbox.BoundingBox{}
+func GetBoxes(lines []string) ([]*boundingbox.BoundingBox, []error) {
+	boxes := []*boundingbox.BoundingBox{}
 	errs := []error{}
 	for _, line := range lines {
 		coords, err := parseCoords(line)
@@ -17,7 +17,7 @@ func GetBoxes(lines []string) ([]boundingbox.BoundingBox, []error) {
 			errs = append(errs, err)
 			continue
 		}
-		boxes = append(boxes, boundingbox.BoundingBox{
+		boxes = append(boxes, &boundingbox.BoundingBox{
 			Left:   coords[0],
 			Top:    coords[1],
 			Right:  coords[2],

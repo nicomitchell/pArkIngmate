@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/pArkIngmate/src/grid"
 	"github.com/pArkIngmate/src/imgwriter/imageeditor"
 
 	"github.com/pArkIngmate/src/boundingbox"
@@ -34,7 +35,15 @@ func main() {
 	for _, val := range centers {
 		fmt.Printf("%d, %d\n", val.X, val.Y)
 	}
-
+	redPts := centers
+	greenPts := []boundingboxtypes.Coordinate{}
+	_, graph := grid.BuildGrid(boxes)
+	for _, line := range graph {
+		pts := grid.GetGapPoints(line)
+		for _, val := range pts {
+			greenPts = append(greenPts, *val)
+		}
+	}
 	imgFile, err := os.Open("/home/nicolasmitchell/go/src/github.com/darknet/predictions.png")
 	if err != nil {
 		panic(fmt.Sprintf("File open error: %s", err.Error()))
@@ -53,7 +62,7 @@ func main() {
 	defer outFile.Close()
 
 	imgEditor := imageeditor.New(img)
-	iWriter := imgwriter.New(centers, nil, imgEditor, outFile)
+	iWriter := imgwriter.New(redPts, greenPts, imgEditor, outFile)
 	iWriter.SetAllPointsCircles(10)
 	err = iWriter.Save()
 	if err != nil {
@@ -78,7 +87,7 @@ func getLines(f io.Reader) []string {
 	return lines
 }
 
-func getCenters(boxes []boundingbox.BoundingBox) []boundingboxtypes.Coordinate {
+func getCenters(boxes []*boundingbox.BoundingBox) []boundingboxtypes.Coordinate {
 	centers := []boundingboxtypes.Coordinate{}
 	for _, box := range boxes {
 		centers = append(centers, box.Center())
@@ -86,7 +95,7 @@ func getCenters(boxes []boundingbox.BoundingBox) []boundingboxtypes.Coordinate {
 	return centers
 }
 
-func getCrossPixels(pts []boundingboxtypes.Coordinate) []boundingboxtypes.Coordinate {
+func getCrossPixels(pts []*boundingboxtypes.Coordinate) []boundingboxtypes.Coordinate {
 	var out []boundingboxtypes.Coordinate
 	for _, val := range pts {
 		for i := -15; i < 16; i++ {
