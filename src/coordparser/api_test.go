@@ -10,16 +10,15 @@ import (
 )
 
 func Test_GetBoxes_ReturnsBoundingBoxes(t *testing.T) {
-	testStrings := make(chan string)
-	go func() {
-		defer close(testStrings)
-		for i := 0; i < 100; i++ {
-			testStrings <- string(i) + "\t"
-		}
-	}()
+	testStrings := []string{}
+
+	for i := 0; i < 100; i++ {
+		testStrings = append(testStrings, (string(i) + "\t"))
+	}
+
 	boxes, errs := coordparser.GetBoxes(testStrings)
 	i := 0
-	for box := range boxes {
+	for _, box := range boxes {
 		fmt.Printf(
 			"\n\nL: %d\tT: %d\tR: %d\tB: %d",
 			box.Left,
@@ -36,7 +35,7 @@ func Test_GetBoxes_ReturnsBoundingBoxes(t *testing.T) {
 		assert.Equal(t, i, box.Bottom)
 		i++
 	}
-	for err := range errs {
+	for _, err := range errs {
 		fmt.Println(err.Error())
 	}
 }

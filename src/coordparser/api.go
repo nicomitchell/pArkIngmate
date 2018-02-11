@@ -8,29 +8,23 @@ import (
 )
 
 //GetBoxes returns the BoundingBoxes parsed from the file
-func GetBoxes(lines <-chan string) (chan boundingbox.BoundingBox, chan error) {
-	out := make(chan boundingbox.BoundingBox)
-	errs := make(chan error)
-	go func() {
-		defer close(out)
-		defer close(errs)
-		for line := range lines {
-			go func(line string) {
-				coords, err := parseCoords(line)
-				if err != nil {
-					errs <- err
-					return
-				}
-				out <- boundingbox.BoundingBox{
-					Left:   coords[0],
-					Top:    coords[1],
-					Right:  coords[2],
-					Bottom: coords[3],
-				}
-			}(line)
+func GetBoxes(lines []string) ([]boundingbox.BoundingBox, []error) {
+	boxes := []boundingbox.BoundingBox{}
+	errs := []error{}
+	for _, line := range lines {
+		coords, err := parseCoords(line)
+		if err != nil {
+			errs = append(errs, err)
+			continue
 		}
-	}()
-	return out, errs
+		boxes = append(boxes, boundingbox.BoundingBox{
+			Left:   coords[0],
+			Top:    coords[1],
+			Right:  coords[2],
+			Bottom: coords[3],
+		})
+	}
+	return boxes, errs
 }
 
 func parseCoords(line string) ([]int, error) {
