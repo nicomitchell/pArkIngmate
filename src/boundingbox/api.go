@@ -1,6 +1,17 @@
 package boundingbox
 
-import "github.com/pArkIngmate/src/boundingbox/boundingboxiface"
+import (
+	"github.com/pArkIngmate/src/boundingbox/boundingboxiface"
+	"github.com/pArkIngmate/src/boundingbox/boundingboxtypes"
+)
+
+//BoundingBox contains the coordinates of one bounded object
+type BoundingBox struct {
+	Left   int
+	Right  int
+	Top    int
+	Bottom int
+}
 
 //New returns a new bounding box that implements the interface
 func New(l, t, r, b int) boundingboxiface.Box {
@@ -13,8 +24,11 @@ func New(l, t, r, b int) boundingboxiface.Box {
 }
 
 //Center returns the point at the center of the Bounding Box
-func (b *BoundingBox) Center() (x, y int) {
-	return int((b.Left + b.Right) / 2), int((b.Top + b.Bottom) / 2)
+func (b *BoundingBox) Center() (coord boundingboxtypes.Coordinate) {
+	return boundingboxtypes.Coordinate{
+		X: int((b.Left + b.Right) / 2),
+		Y: int((b.Top + b.Bottom) / 2),
+	}
 }
 
 //Area returns the area of the bounding box
