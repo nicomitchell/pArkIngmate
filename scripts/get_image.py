@@ -42,6 +42,8 @@ for i in items:
 f = open("../bounding_box.txt", 'w')
 
 for i in items:
+    i = i.replace("\\t","\t")
+    print("writing " + i + " to coordinate file")
     f.write(i + "\n")
 
 f.close()
