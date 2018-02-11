@@ -3,6 +3,8 @@ package imageeditor
 import (
 	"image"
 	"image/color"
+	"image/jpeg"
+	"io"
 
 	"github.com/pArkIngmate/src/boundingbox/boundingboxtypes"
 )
@@ -14,9 +16,10 @@ type ChangedImage struct {
 }
 
 //New returns a new ChangedImage which contains a regular image
-func New(img image.Image) image.Image {
+func New(img image.Image) *ChangedImage {
 	return &ChangedImage{
-		Img: img,
+		Img:     img,
+		changed: map[boundingboxtypes.Coordinate]color.Color{},
 	}
 }
 
@@ -37,4 +40,14 @@ func (i *ChangedImage) Bounds() image.Rectangle {
 //ColorModel returns the image's color model
 func (i *ChangedImage) ColorModel() color.Model {
 	return i.Img.ColorModel()
+}
+
+//Set sets the color of an individual pixel
+func (i *ChangedImage) Set(pt boundingboxtypes.Coordinate, c color.Color) {
+	i.changed[pt] = c
+}
+
+//Save saves the image to disk as a png
+func (i *ChangedImage) Save(f io.Writer) error {
+	return jpeg.Encode(f, i, nil)
 }
