@@ -1,6 +1,6 @@
 import subprocess
 
-option = 2
+option = 0
 
 cmd = "sudo rm current.jpg"
 subprocess.call(cmd.split(),cwd="../../darknet/data")

@@ -1,6 +1,8 @@
 package gridbuilder
 
 import (
+	"log"
+
 	"github.com/pArkIngmate/src/boundingbox"
 	"github.com/pArkIngmate/src/boundingbox/boundingboxtypes"
 	"github.com/pArkIngmate/src/grid/gridbuilder/gridbuildertypes"
@@ -38,7 +40,7 @@ func (g *GridBuilder) GetLines() []*gridbuildertypes.Line {
 }
 
 func findIntersection(l *gridbuildertypes.Line, b *boundingbox.BoundingBox) bool {
-	for x := b.Left; x < b.Right && x < l.End.X; x++ {
+	for x := b.Left; x < b.Right; x++ {
 		step := x - l.Start.X
 		val := l.Slope*float64(step) + float64(l.Start.Y)
 		if val > float64(b.Bottom) && val < float64(b.Top) {
@@ -52,7 +54,9 @@ func findIntersection(l *gridbuildertypes.Line, b *boundingbox.BoundingBox) bool
 func (g *GridBuilder) DetermineIntersects(l *gridbuildertypes.Line) []*boundingbox.BoundingBox {
 	intersections := []*boundingbox.BoundingBox{}
 	for _, box := range g.Boxes {
+		log.Printf("Box L: %d, R: %d", box.Left, box.Right)
 		if findIntersection(l, box) {
+			log.Println("intersection found")
 			intersections = append(intersections, box)
 		}
 	}

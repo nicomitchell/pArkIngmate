@@ -1,6 +1,8 @@
 package gridbuildertypes
 
 import (
+	"log"
+
 	"github.com/pArkIngmate/src/boundingbox"
 	"github.com/pArkIngmate/src/boundingbox/boundingboxtypes"
 )
@@ -18,6 +20,7 @@ func NewLine(sBox, eBox *boundingbox.BoundingBox) *Line {
 	start := sBox.Center()
 	end := eBox.Center()
 	slope := (float64(end.Y - start.Y)) / float64((end.X / start.X))
+	log.Printf("Line: %d,%d,%f", start, end, slope)
 	return &Line{
 		Start:    start,
 		End:      end,

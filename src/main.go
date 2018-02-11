@@ -37,6 +37,7 @@ func main() {
 	}
 	redPts := centers
 	greenPts := []boundingboxtypes.Coordinate{}
+	log.Printf("Getting empty points")
 	_, graph := grid.BuildGrid(boxes)
 	for _, line := range graph {
 		pts := grid.GetGapPoints(line)
