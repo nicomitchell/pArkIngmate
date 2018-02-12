@@ -32,8 +32,16 @@ func getCenters(boxes []boundingbox.BoundingBox) []boundingboxtypes.Coordinate {
 func (g *GridBuilder) GetLines() []*gridbuildertypes.Line {
 	lines := []*gridbuildertypes.Line{}
 	for i, val := range g.Boxes {
-		for j := i; j < len(g.Boxes); j++ {
-			lines = append(lines, gridbuildertypes.NewLine(val, g.Boxes[j]))
+		for j := i + 1; j < len(g.Boxes); j++ {
+			var min, max *boundingbox.BoundingBox
+			if val.Center().X <= g.Boxes[j].Center().X {
+				min = g.Boxes[j]
+				max = val
+			} else {
+				min = val
+				max = g.Boxes[j]
+			}
+			lines = append(lines, gridbuildertypes.NewLine(min, max))
 		}
 	}
 	return lines
@@ -54,7 +62,6 @@ func findIntersection(l *gridbuildertypes.Line, b *boundingbox.BoundingBox) bool
 func (g *GridBuilder) DetermineIntersects(l *gridbuildertypes.Line) []*boundingbox.BoundingBox {
 	intersections := []*boundingbox.BoundingBox{}
 	for _, box := range g.Boxes {
-		log.Printf("Box L: %d, R: %d", box.Left, box.Right)
 		if findIntersection(l, box) {
 			log.Println("intersection found")
 			intersections = append(intersections, box)

@@ -19,7 +19,7 @@ type Line struct {
 func NewLine(sBox, eBox *boundingbox.BoundingBox) *Line {
 	start := sBox.Center()
 	end := eBox.Center()
-	slope := (float64(end.Y - start.Y)) / float64((end.X / start.X))
+	slope := (float64(end.Y) - float64(start.Y)) / (float64(end.X) - float64(start.X))
 	log.Printf("Line: %d,%d,%f", start, end, slope)
 	return &Line{
 		Start:    start,
