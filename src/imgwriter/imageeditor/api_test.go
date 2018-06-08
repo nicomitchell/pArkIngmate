@@ -4,7 +4,7 @@ import (
 	"image"
 	"testing"
 
-	"github.com/pArkIngmate/src/imageeditor"
+	"github.com/pArkIngmate/src/imgwriter/imageeditor"
 	"github.com/stretchr/testify/assert"
 )
 
