@@ -1,6 +1,6 @@
 import subprocess
 
-option = 0
+option = 1
 
 cmd = "sudo rm current.jpg"
 subprocess.call(cmd.split(),cwd="../../darknet/data")
@@ -13,25 +13,38 @@ cmd3 = "./darknet detect cfg/yolo.cfg yolo.weights data/current.jpg -thresh3"
 output = str(subprocess.check_output(cmd3.split(), cwd="../../darknet"))
 print(output)
 
-separator = "\\n\\n===============\\nLABELS : BEGIN\\n===============\\n"
-ignore,keep = output.split(separator)
+separator = "\n\n===============\nLABELS : BEGIN\n===============\n"
+try:
+    ignore, keep = output.split(separator)
+except ValueError:
+    print("could not split line", output)
 
 print("\n\n\n" + keep)
 
-items = keep.split("\\t\\t\\n")
+items = keep.split("\t\t\n")
 remove = False
-for i, val in  enumerate(items):
-    if remove:
-        print("REMOVED: " + val)
-        items.remove(val)
-        continue
-    remove = False
-    print ("\n" + val)
+i = 0
+while i < len(items):
     if i % 2 == 0 or i == 0:
-        if val[:3] != "car":
-            print("REMOVED: " + val)
-            items.remove(val)
-            remove = True
+        if items[i][:3] != "car":
+            print("REMOVED: " + items[i])
+            items.remove(items[i])
+            if i < len(items)-1:
+                items.remove(items[i])          #remove bounding boxes as well            
+            continue
+    i += 1
+# for i, val in  enumerate(items):
+#     if remove:
+#         print("REMOVED: " + val)
+#         items.remove(val)
+#         continue
+#     remove = False
+#     print ("\n" + val)
+#     if i % 2 == 0 or i == 0:
+#         if val[:3] != "car":
+#             print("REMOVED: " + val)
+#             items.remove(val)
+#             remove = True
 
 for val in items:
     if val[:3] == "car":
