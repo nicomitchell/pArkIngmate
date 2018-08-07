@@ -2,6 +2,8 @@ package coordparser_test
 
 import (
 	"fmt"
+	"log"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,16 +12,15 @@ import (
 )
 
 func Test_GetBoxes_ReturnsBoundingBoxes(t *testing.T) {
-	testStrings := []string{}
-
-	for i := 0; i < 100; i++ {
-		testStrings = append(testStrings, (string(i) + "\t"))
+	var s string
+	for i := 0; i < 100; i += 4 {
+		s = fmt.Sprintf("%s\n%s", s, fmt.Sprintf("%d\t%d\t%d\t%d", i, i+1, i+2, i+3))
 	}
-
-	boxes, errs := coordparser.GetBoxes(testStrings)
+	lines := strings.Split(s, "\n")
+	boxes, errs := coordparser.GetBoxes(lines)
 	i := 0
 	for _, box := range boxes {
-		fmt.Printf(
+		log.Printf(
 			"\n\nL: %d\tT: %d\tR: %d\tB: %d",
 			box.Left,
 			box.Top,
