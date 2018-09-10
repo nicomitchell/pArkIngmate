@@ -7,3 +7,4 @@ full_lot.jpg
 bounding_box.txt
 .vscode/launch.json
 image_out.jpg
+*.test
